@@ -5,19 +5,34 @@ const colorLog = require('../util/custom_log');
 
 
 exports.getLogin = (req, res, next) => {
+  let message = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: false
+    isAuthenticated: false,
+    errorMessage: message
+
   });
 };
 
 
 exports.getSignUp= (req, res, next) => {
+  let message = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render('auth/signUp', {
     path: '/signUp',
     pageTitle: 'Sign Up',
-    isAuthenticated: false
+    isAuthenticated: false,
+    errorMessage: message
   });
 }
 
@@ -63,7 +78,6 @@ exports.postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             req.session.user = user;
             return req.session.save(err => {
-              colorLog("session saved");
 
               res.redirect('/');
             });
@@ -84,6 +98,27 @@ exports.postLogin = (req, res, next) => {
 
 
 exports.logout = (req,res,next) =>{
+  req.session.destroy(err => {
+    console.log(err);
+    res.redirect('/');
+  });
+}
+
+exports.getResetPassword = (req,res,next) =>{
+  let message = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+  res.render('auth/reset', {
+    path: '/reset',
+    pageTitle: 'Reset Password',
+    errorMessage: message
+  });
+}
+
+exports.resetPassword = (req,res,next) =>{
   req.session.destroy(err => {
     console.log(err);
     res.redirect('/');

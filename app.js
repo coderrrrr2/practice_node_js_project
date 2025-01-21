@@ -7,6 +7,8 @@ const session = require('express-session');
 const pg = require('pg');
 const colorLog = require('./util/custom_log');
 const csrf = require('csurf');
+const flash = require('connect-flash');
+
 
 require('dotenv').config();
 
@@ -60,6 +62,9 @@ app.use(session({
 
 app.use(csrfProtection);
 
+app.use(flash());
+
+
 // app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false }));
 
 
@@ -70,9 +75,8 @@ app.use((req, res, next) => {
   }
 
 
-  User.findByPk(req.session.user._id)
+  User.findByPk(req.session.user.id)
     .then(user => {
-
       req.user = user;
       next();
 

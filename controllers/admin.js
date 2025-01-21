@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const colorLog = require('../util/custom_log');
 
 exports.getAddProduct = (req, res, next) => {
  
@@ -18,6 +19,7 @@ exports.postAddProduct = async(req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
+  colorLog(req.user)
   await req.user.createProduct
    ({
     title: title,
